@@ -1,6 +1,15 @@
 import React, { useState } from "react";
-import { Box, Text, Input, InputField, Button } from "@gluestack-ui/themed";
+import {
+    Box,
+    Text,
+    Input,
+    InputField,
+    Button,
+    ButtonText,
+    VStack
+} from "@gluestack-ui/themed";
 import { useRouter } from "expo-router";
+import { TouchableOpacity, KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 
 export default function LoginScreen() {
     const router = useRouter();
@@ -9,40 +18,74 @@ export default function LoginScreen() {
 
     const handleLogin = () => {
         if (username === "user" && password === "Password@123") {
-            router.push("/todo" as any); // ✅ works because app/todo.tsx exists
+            router.push("/home");
         } else {
-            alert("Invalid credentials!");
+            // Using a custom alert box or message instead of the native one
+            console.warn("Invalid credentials!");
         }
     };
 
     return (
-        <Box flex={1} justifyContent="center" alignItems="center" p="$5">
-            <Text size="2xl" mb="$5">Login</Text>
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+            <Box flex={1} justifyContent="center" alignItems="center" p="$5">
+                <VStack space="md" w="90%" alignItems="flex-start">
+                    <Text size="3xl" fontWeight="bold" color="$black">
+                        Log In
+                    </Text>
+                    <Text size="md" color="$coolGray500">
+                        Enter Explore & Enjoy
+                    </Text>
+                    <Text size="md" color="$black">
+                        User Name
+                    </Text>
+                    <Input w="100%" size="lg" rounded="$2xl">
+                        <InputField
+                            placeholder="Username"
+                            value={username}
+                            onChangeText={setUsername}
+                        />
+                    </Input>
+                    <Text size="md" color="$black">
+                        Password
+                    </Text>
+                    <Input w="100%" size="lg" rounded="$2xl">
+                        <InputField
+                            placeholder="Password"
+                            secureTextEntry
+                            value={password}
+                            onChangeText={setPassword}
+                        />
+                    </Input>
 
-            <Input mb="$3" w="80%">
-                <InputField
-                    placeholder="Username"
-                    value={username}
-                    onChangeText={setUsername}
-                />
-            </Input>
+                    <Button
+                        w="100%"
+                        size="lg"
+                        onPress={handleLogin}
+                        backgroundColor="$blue600"
+                        rounded="$2xl"
+                    >
+                        <ButtonText color="$white">Log In</ButtonText>
+                    </Button>
 
-            <Input mb="$3" w="80%">
-                <InputField
-                    placeholder="Password"
-                    secureTextEntry
-                    value={password}
-                    onChangeText={setPassword}
-                />
-            </Input>
-
-            <Button w="80%" mb="$3" onPress={handleLogin}>
-                <Text color="white">Login</Text>
-            </Button>
-
-            <Button w="80%" variant="outline" onPress={() => router.push("/register" as any)}>
-                <Text>Register</Text>
-            </Button>
-        </Box>
+                </VStack>
+                <VStack p="$8" space="md" w="90%" alignItems="center">
+                    <TouchableOpacity onPress={() => router.push("/register")}>
+                        <Text size="sm"  color="$blue600">
+                            Don't have an account?{" "}
+                            <Text alignItems="center" fontWeight="bold">Sign Up</Text>
+                        </Text>
+                    </TouchableOpacity>
+                </VStack>
+            </Box>
+        </KeyboardAvoidingView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    }
+});
