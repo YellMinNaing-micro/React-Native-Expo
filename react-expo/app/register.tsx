@@ -1,44 +1,95 @@
 import React, { useState } from "react";
-import { Box, Text, Input, InputField, Button } from "@gluestack-ui/themed";
-import { router } from "expo-router";
+import {
+    Box,
+    Text,
+    Input,
+    InputField,
+    Button,
+    ButtonText,
+    VStack
+} from "@gluestack-ui/themed";
+import { useRouter } from "expo-router";
+import { TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 
 export default function RegisterScreen() {
+    const router = useRouter();
     const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const handleRegister = () => {
-        alert(`Account created for ${username}`);
+        // Implement your registration logic here
+        // Using a custom message instead of a native alert
+        console.warn(`Account created for ${username}`);
         router.replace("/");
     };
 
     return (
-        <Box flex={1} justifyContent="center" alignItems="center" p="$5">
-            <Text size="2xl" mb="$5">Register</Text>
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+            <Box flex={1} justifyContent="center" alignItems="center"  p="$5">
+                <VStack space="md" w="90%" alignItems="flex-start">
+                    <Text size="3xl" fontWeight="bold" color="$black">
+                        Sign Up
+                    </Text>
+                    <Text size="md" color="$coolGray500">
+                        Start Your Journey.
+                    </Text>
+                    <Text size="md" color="$black">
+                        User Name
+                    </Text>
+                    <Input w="100%" size="lg" rounded="$2xl">
+                        <InputField
+                            placeholder="Full name"
+                            value={username}
+                            onChangeText={setUsername}
+                        />
+                    </Input>
+                    <Text size="md" color="$black">
+                        Email address
+                    </Text>
+                    <Input w="100%" size="lg" rounded="$2xl">
+                        <InputField
+                            placeholder="Email"
+                            keyboardType="email-address"
+                            value={email}
+                            onChangeText={setEmail}
+                        />
+                    </Input>
+                    <Text size="md" color="$black">
+                        Password
+                    </Text>
+                    <Input w="100%" size="lg" rounded="$2xl">
+                        <InputField
+                            placeholder="Password"
+                            secureTextEntry
+                            value={password}
+                            onChangeText={setPassword}
+                        />
+                    </Input>
 
-            <Input mb="$3" w="80%">
-                <InputField
-                    placeholder="Username"
-                    value={username}
-                    onChangeText={setUsername}
-                />
-            </Input>
+                    <Button
+                        w="100%"
+                        size="lg"
+                        onPress={handleRegister}
+                        backgroundColor="$blue600"
+                        rounded="$2xl"
+                    >
+                        <ButtonText color="$white">Sign Up</ButtonText>
+                    </Button>
 
-            <Input mb="$3" w="80%">
-                <InputField
-                    placeholder="Password"
-                    secureTextEntry
-                    value={password}
-                    onChangeText={setPassword}
-                />
-            </Input>
-
-            <Button w="80%" mb="$3" onPress={handleRegister}>
-                <Text color="white">Register</Text>
-            </Button>
-
-            <Button w="80%" variant="outline" onPress={() => router.back()}>
-                <Text>Back to Login</Text>
-            </Button>
-        </Box>
+                </VStack>
+                <VStack space="md" w="90%" alignItems="center" p="$8">
+                    <TouchableOpacity onPress={() => router.back()}>
+                        <Text size="sm" color="$blue600">
+                            Already have an account?{" "}
+                            <Text fontWeight="bold">Sign In</Text>
+                        </Text>
+                    </TouchableOpacity>
+                </VStack>
+            </Box>
+        </KeyboardAvoidingView>
     );
 }
