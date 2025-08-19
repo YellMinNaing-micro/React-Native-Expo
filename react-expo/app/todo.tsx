@@ -18,7 +18,7 @@ export default function TodoScreen() {
     };
 
     return (
-        <Box flex={1} p="$5" bg="$backgroundLight0">
+        <Box flex={1} p="$5">
             <Text size="2xl" mb="$5">My Todo List</Text>
 
             <Input mb="$3" w="100%">
