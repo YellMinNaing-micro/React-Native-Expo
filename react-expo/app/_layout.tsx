@@ -5,7 +5,7 @@ import { config } from "@gluestack-ui/config";
 export default function RootLayout() {
     return (
         <GluestackUIProvider config={config}>
-            <Stack screenOptions={{ headerShown: true }} />
+            <Stack screenOptions={{ headerShown: false }} />
         </GluestackUIProvider>
     );
 }
