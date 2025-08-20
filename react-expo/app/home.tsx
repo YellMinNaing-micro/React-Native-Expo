@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
     Box,
     Text,
@@ -19,7 +19,7 @@ import {
     ClipboardPen,
     Plus,
 } from "lucide-react-native";
-import { FlatList, Platform, StyleSheet } from "react-native";
+import { FlatList, Platform, StyleSheet, Animated } from "react-native";
 import { Product, products } from "../data/product";
 import { StatusBar } from "expo-status-bar";
 
@@ -29,11 +29,11 @@ interface ProductCardProps {
 }
 
 // Product card component
-const ProductCard = ({product}: ProductCardProps) => {
+const ProductCard = ({ product }: ProductCardProps) => {
     const router = useRouter();
     const imageSource =
         typeof product.image === "string"
-            ? {uri: product.image}
+            ? { uri: product.image }
             : product.image;
 
     return (
@@ -49,11 +49,11 @@ const ProductCard = ({product}: ProductCardProps) => {
                 ...Platform.select({
                     ios: {
                         shadowColor: "#000",
-                        shadowOffset: {width: 0, height: 2},
+                        shadowOffset: { width: 0, height: 2 },
                         shadowOpacity: 0.1,
                         shadowRadius: 4,
                     },
-                    android: {elevation: 3},
+                    android: { elevation: 3 },
                 }),
             }}
         >
@@ -94,10 +94,10 @@ const ProductCard = ({product}: ProductCardProps) => {
                         bg="$blue500"
                         rounded="$full"
                         p="$2"
-                        $pressed={{opacity: 0.7}}
-                        onPress={() => router.push(`/${product.id}`)} // ✅ navigate
+                        $pressed={{ opacity: 0.7 }}
+                        onPress={() => router.push(`/${product.id}`)}
                     >
-                        <Plus color="white" size={16}/>
+                        <Plus color="white" size={16} />
                     </Pressable>
                 </HStack>
             </VStack>
@@ -111,13 +111,34 @@ export default function HomeScreen() {
     const [selectedOption, setSelectedOption] = useState("Payment");
 
     const menuOptions = [
-        {label: "Payment", icon: ShoppingCart},
-        {label: "Secure Logistics", icon: Package},
-        {label: "Contract", icon: ClipboardPen},
-        {label: "Setting", icon: ShoppingCart},
-        {label: "Secure", icon: Package},
-        {label: "Just", icon: ClipboardPen},
+        { label: "Payment", icon: ShoppingCart },
+        { label: "Secure Logistics", icon: Package },
+        { label: "Contract", icon: ClipboardPen },
+        { label: "Setting", icon: ShoppingCart },
+        { label: "Secure", icon: Package },
+        { label: "Just", icon: ClipboardPen },
     ];
+
+    // Animated values for menu items
+    const animatedValues = useRef(
+        menuOptions.reduce((acc, option) => {
+            acc[option.label] = new Animated.Value(
+                option.label === selectedOption ? 1 : 0
+            );
+            return acc;
+        }, {} as Record<string, Animated.Value>)
+    ).current;
+
+    // Animate background color when selectedOption changes
+    useEffect(() => {
+        menuOptions.forEach((option) => {
+            Animated.timing(animatedValues[option.label], {
+                toValue: option.label === selectedOption ? 1 : 0,
+                duration: 500,
+                useNativeDriver: false,
+            }).start();
+        });
+    }, [selectedOption]);
 
     return (
         <Box flex={1} gap={4} bg="$coolGray50" pt="$10">
@@ -128,19 +149,19 @@ export default function HomeScreen() {
                     onPress={() => router.back()}
                     p="$2"
                     rounded="$full"
-                    $pressed={{opacity: 0.7}}
+                    $pressed={{ opacity: 0.7 }}
                 >
-                    <ChevronLeft size={24} color="#000"/>
+                    <ChevronLeft size={24} color="#000" />
                 </Pressable>
                 <Heading size="lg" fontWeight="bold">
                     Shopping Bag
                 </Heading>
                 <HStack>
-                    <Pressable p="$2" rounded="$full" $pressed={{opacity: 0.7}}>
-                        <Search size={24} color="#000"/>
+                    <Pressable p="$2" rounded="$full" $pressed={{ opacity: 0.7 }}>
+                        <Search size={24} color="#000" />
                     </Pressable>
-                    <Pressable p="$2" rounded="$full" $pressed={{opacity: 0.7}}>
-                        <Edit size={24} color="#000"/>
+                    <Pressable p="$2" rounded="$full" $pressed={{ opacity: 0.7 }}>
+                        <Edit size={24} color="#000" />
                     </Pressable>
                 </HStack>
             </HStack>
@@ -155,31 +176,40 @@ export default function HomeScreen() {
             >
                 <HStack space="xs" alignItems="center">
                     {menuOptions.map((option) => {
-                        const isSelected = selectedOption === option.label;
-                        const backgroundColor = isSelected ? "$blue500" : "$coolGray200";
-                        const textColor = isSelected ? "$white" : "$coolGray800";
-                        const iconColor = isSelected ? "white" : "black";
                         const IconComponent = option.icon;
+                        const animatedBg = animatedValues[option.label].interpolate({
+                            inputRange: [0, 1],
+                            outputRange: ["#E5E7EB", "#3B82F6"], // gray -> blue
+                        });
+                        const isSelected = selectedOption === option.label;
+                        const textColor = isSelected ? "#FFFFFF" : "#1F2937";
+                        const iconColor = isSelected ? "#FFFFFF" : "#000000";
 
                         return (
                             <Pressable
                                 key={option.label}
                                 onPress={() => setSelectedOption(option.label)}
-                                $pressed={{opacity: 0.7}}
                             >
-                                <HStack
-                                    space="xs"
-                                    alignItems="center"
-                                    bg={backgroundColor}
-                                    px="$4"
-                                    py="$2"
-                                    rounded="$full"
+                                <Animated.View
+                                    style={{
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        paddingHorizontal: 16,
+                                        paddingVertical: 8,
+                                        borderRadius: 9999,
+                                        backgroundColor: animatedBg,
+                                        marginRight: 8,
+                                    }}
                                 >
-                                    <IconComponent size={16} color={iconColor}/>
-                                    <Text size="sm" color={textColor}>
+                                    <IconComponent size={16} color={iconColor} />
+                                    <Text
+                                        size="sm"
+                                        color={textColor}
+                                        style={{ marginLeft: 8 }}
+                                    >
                                         {option.label}
                                     </Text>
-                                </HStack>
+                                </Animated.View>
                             </Pressable>
                         );
                     })}
@@ -189,11 +219,11 @@ export default function HomeScreen() {
             {/* Product list */}
             <FlatList
                 data={products}
-                renderItem={({item}) => <ProductCard product={item}/>}
+                renderItem={({ item }) => <ProductCard product={item} />}
                 keyExtractor={(item) => item.id}
                 numColumns={2}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{paddingEnd: 16, paddingBottom: 16}}
+                contentContainerStyle={{ paddingEnd: 16, paddingBottom: 16 }}
                 columnWrapperStyle={{
                     justifyContent: "space-between",
                     paddingHorizontal: 8,
