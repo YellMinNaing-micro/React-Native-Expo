@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Text, Input, InputField, Button } from "@gluestack-ui/themed";
 import { FlatList, TouchableOpacity } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 export default function TodoScreen() {
     const [task, setTask] = useState("");
