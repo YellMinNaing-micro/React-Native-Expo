@@ -10,6 +10,7 @@ import {
 } from "@gluestack-ui/themed";
 import { useRouter } from "expo-router";
 import { TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 export default function RegisterScreen() {
     const router = useRouter();
@@ -29,6 +30,7 @@ export default function RegisterScreen() {
             style={{ flex: 1 }}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
+            <StatusBar style="dark" />
             <Box flex={1} justifyContent="center" alignItems="center"  p="$5">
                 <VStack space="md" w="90%" alignItems="flex-start">
                     <Text size="3xl" fontWeight="bold" color="$black">
