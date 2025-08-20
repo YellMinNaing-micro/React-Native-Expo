@@ -10,6 +10,7 @@ import {
 } from "@gluestack-ui/themed";
 import { useRouter } from "expo-router";
 import { TouchableOpacity, KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 export default function LoginScreen() {
     const router = useRouter();
@@ -30,6 +31,8 @@ export default function LoginScreen() {
             style={styles.container}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
+            <StatusBar style="dark"/>
+
             <Box flex={1} justifyContent="center" alignItems="center" p="$5">
                 <VStack space="md" w="90%" alignItems="flex-start">
                     <Text size="3xl" fontWeight="bold" color="$black">
@@ -73,7 +76,7 @@ export default function LoginScreen() {
                 </VStack>
                 <VStack p="$8" space="md" w="90%" alignItems="center">
                     <TouchableOpacity onPress={() => router.push("/register")}>
-                        <Text size="sm"  color="$blue600">
+                        <Text size="sm" color="$blue600">
                             Don't have an account?{" "}
                             <Text alignItems="center" fontWeight="bold">Sign Up</Text>
                         </Text>
