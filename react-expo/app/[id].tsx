@@ -63,7 +63,7 @@ export default function DetailScreen() {
                 mt={-20}
                 borderTopLeftRadius="$3xl"
                 borderTopRightRadius="$3xl"
-                p="$5"
+                p="$3"
                 bg="$white"
                 shadowColor="black"
                 shadowOffset={{ width: 0, height: -2 }}
