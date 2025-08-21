@@ -18,17 +18,16 @@ import {
     Package,
     ClipboardPen,
     Plus,
+    Settings,
 } from "lucide-react-native";
 import { FlatList, Platform, StyleSheet, Animated } from "react-native";
 import { Product, products } from "../data/product";
 import { StatusBar } from "expo-status-bar";
 
-// Props for a single product card
 interface ProductCardProps {
     product: Product;
 }
 
-// Product card component
 const ProductCard = ({ product }: ProductCardProps) => {
     const router = useRouter();
     const imageSource =
@@ -105,21 +104,20 @@ const ProductCard = ({ product }: ProductCardProps) => {
     );
 };
 
-// Main Home screen
 export default function HomeScreen() {
     const router = useRouter();
     const [selectedOption, setSelectedOption] = useState("Payment");
+    const [isLogoutDialogVisible, setIsLogoutDialogVisible] = useState(false);
 
     const menuOptions = [
         { label: "Payment", icon: ShoppingCart },
         { label: "Secure Logistics", icon: Package },
         { label: "Contract", icon: ClipboardPen },
-        { label: "Setting", icon: ShoppingCart },
+        { label: "Setting", icon: Settings },
         { label: "Secure", icon: Package },
         { label: "Just", icon: ClipboardPen },
     ];
 
-    // Animated values for menu items
     const animatedValues = useRef(
         menuOptions.reduce((acc, option) => {
             acc[option.label] = new Animated.Value(
@@ -129,7 +127,6 @@ export default function HomeScreen() {
         }, {} as Record<string, Animated.Value>)
     ).current;
 
-    // Animate background color when selectedOption changes
     useEffect(() => {
         menuOptions.forEach((option) => {
             Animated.timing(animatedValues[option.label], {
@@ -140,10 +137,14 @@ export default function HomeScreen() {
         });
     }, [selectedOption]);
 
+    const handleLogout = () => {
+        console.log("Logging out...");
+        router.replace("/");
+    };
+
     return (
         <Box flex={1} gap={4} bg="$coolGray50" pt="$10">
             <StatusBar style="dark" />
-            {/* Header */}
             <HStack justifyContent="space-between" alignItems="center" px="$2">
                 <Pressable
                     onPress={() => router.back()}
@@ -160,13 +161,12 @@ export default function HomeScreen() {
                     <Pressable p="$2" rounded="$full" $pressed={{ opacity: 0.7 }}>
                         <Search size={24} color="#000" />
                     </Pressable>
-                    <Pressable p="$2" rounded="$full" $pressed={{ opacity: 0.7 }}>
-                        <Edit size={24} color="#000" />
+                    <Pressable p="$2" rounded="$full" $pressed={{ opacity: 0.7 }} onPress={() => setIsLogoutDialogVisible(true)}>
+                        <Settings size={24} color="#000" />
                     </Pressable>
                 </HStack>
             </HStack>
 
-            {/* Menu options */}
             <ScrollView
                 mt="$3"
                 horizontal
@@ -179,7 +179,7 @@ export default function HomeScreen() {
                         const IconComponent = option.icon;
                         const animatedBg = animatedValues[option.label].interpolate({
                             inputRange: [0, 1],
-                            outputRange: ["#E5E7EB", "#3B82F6"], // gray -> blue
+                            outputRange: ["#E5E7EB", "#3B82F6"],
                         });
                         const isSelected = selectedOption === option.label;
                         const textColor = isSelected ? "#FFFFFF" : "#1F2937";
@@ -216,7 +216,6 @@ export default function HomeScreen() {
                 </HStack>
             </ScrollView>
 
-            {/* Product list */}
             <FlatList
                 data={products}
                 renderItem={({ item }) => <ProductCard product={item} />}
@@ -229,6 +228,57 @@ export default function HomeScreen() {
                     paddingHorizontal: 8,
                 }}
             />
+
+            {isLogoutDialogVisible && (
+                <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    right={0}
+                    bottom={0}
+                    justifyContent="center"
+                    alignItems="center"
+                    bg="rgba(0, 0, 0, 0.5)"
+                >
+                    <VStack
+                        bg="$white"
+                        p="$5"
+                        rounded="$lg"
+                        width="$80"
+                        alignItems="center"
+                        space="md"
+                    >
+                        <Heading size="md" color="$coolGray800">Logout</Heading>
+                        <Text color="$coolGray500" textAlign="center">Are you sure you want to log out?</Text>
+                        <HStack space="md">
+                            <Pressable
+                                onPress={() => setIsLogoutDialogVisible(false)}
+                                flex={1}
+                                p="$3"
+                                rounded="$full"
+                                bg="$coolGray200"
+                                $pressed={{ opacity: 0.7 }}
+                            >
+                                <Text textAlign="center" color="$coolGray800" fontWeight="bold">
+                                    Cancel
+                                </Text>
+                            </Pressable>
+                            <Pressable
+                                onPress={handleLogout}
+                                flex={1}
+                                p="$3"
+                                rounded="$full"
+                                bg="$red500"
+                                $pressed={{ opacity: 0.7 }}
+                            >
+                                <Text textAlign="center" color="$white" fontWeight="bold">
+                                    Logout
+                                </Text>
+                            </Pressable>
+                        </HStack>
+                    </VStack>
+                </Box>
+            )}
         </Box>
     );
 }
