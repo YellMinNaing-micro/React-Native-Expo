@@ -28,7 +28,7 @@ export default function LoginScreen() {
 
     const handleLogin = () => {
         if (username === "user" && password === "Password@123") {
-            router.push("/home");
+            router.replace("/home");
         } else {
             console.warn("Invalid credentials!");
         }
