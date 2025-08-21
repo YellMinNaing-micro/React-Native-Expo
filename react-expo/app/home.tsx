@@ -146,14 +146,14 @@ export default function HomeScreen() {
         <Box flex={1} gap={4} bg="$coolGray50" pt="$10">
             <StatusBar style="dark" />
             <HStack justifyContent="space-between" alignItems="center" px="$2">
-                <Pressable
-                    onPress={() => router.back()}
-                    p="$2"
-                    rounded="$full"
-                    $pressed={{ opacity: 0.7 }}
-                >
-                    <ChevronLeft size={24} color="#000" />
-                </Pressable>
+                {/*<Pressable*/}
+                {/*    onPress={() => router.back()}*/}
+                {/*    p="$2"*/}
+                {/*    rounded="$full"*/}
+                {/*    $pressed={{ opacity: 0.7 }}*/}
+                {/*>*/}
+                {/*    <ChevronLeft size={24} color="#000" />*/}
+                {/*</Pressable>*/}
                 <Heading size="lg" fontWeight="bold">
                     Shopping Bag
                 </Heading>
