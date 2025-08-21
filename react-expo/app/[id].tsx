@@ -4,10 +4,11 @@ import { ChevronLeft, Handbag, ShoppingBag, Star, Heart, ShoppingCart } from "lu
 import { products } from "../data/product";
 import React from "react";
 import { StatusBar } from "expo-status-bar";
+import { ScrollView } from "react-native"; // <-- Import ScrollView
 
 export default function DetailScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
-    const navigation = useNavigation(); // Get the navigation object
+    const navigation = useNavigation();
     const product = products.find((p) => p.id === id);
 
     if (!product) {
@@ -17,14 +18,13 @@ export default function DetailScreen() {
             </Box>
         );
     }
-    // Function to handle back navigation
     const handleGoBack = () => {
         navigation.goBack();
     };
 
     return (
         <Box flex={1} bg="$coolGray100">
-            {/* Product Image and Top Icons */}
+            {/* The Image stays in place as the background */}
             <Box position="relative">
                 <Image
                     source={product.image}
@@ -33,19 +33,13 @@ export default function DetailScreen() {
                     h={350}
                     resizeMode="cover"
                 />
-                <HStack position="absolute" top={40} w="$full" justifyContent="space-between" px="$5">
-                    {/* Back Button */}
+                {/* Top Icons remain positioned relative to the image */}
+                <HStack position="absolute" top={40} w="$full" justifyContent="space-between" px="$5" zIndex={10}>
                     <Pressable onPress={handleGoBack}>
-                        <Box
-                            bg="rgba(255, 255, 255, 0.7)"
-                            rounded="$full"
-                            p="$2"
-                        >
+                        <Box bg="rgba(255, 255, 255, 0.7)" rounded="$full" p="$2">
                             <ChevronLeft size={20} color="black" />
                         </Box>
                     </Pressable>
-
-                    {/* Right-aligned Icons (Heart and Bag) */}
                     <HStack space="lg">
                         <Box bg="rgba(255, 255, 255, 0.7)" rounded="$full" p="$2">
                             <Heart size={20} color="black" />
@@ -57,78 +51,47 @@ export default function DetailScreen() {
                 </HStack>
             </Box>
 
-            {/* Product Detail Card */}
-            <Box
-                flex={1}
-                mt={-20}
-                borderTopLeftRadius="$3xl"
-                borderTopRightRadius="$3xl"
-                p="$3"
-                bg="$white"
-                shadowColor="black"
-                shadowOffset={{ width: 0, height: -2 }}
-                shadowOpacity={0.1}
-                shadowRadius={8}
+            {/* The Scrollable Product Detail Card */}
+            {/* This is the key change: a ScrollView to allow the content to scroll */}
+            <ScrollView showsVerticalScrollIndicator={false}
+                style={{
+                    flex: 1, // Allow it to take up the rest of the space
+                    marginTop: -20,
+                    zIndex: 1, // Ensure it's above the image
+                    borderTopLeftRadius: 24, // Use a number for borderRadius
+                    borderTopRightRadius: 24,
+                    backgroundColor: 'white',
+                    shadowColor: 'black',
+                    shadowOffset: { width: 0, height: -2 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 8,
+                }}
             >
-                <VStack space="sm">
-                    {/* Title and Collection */}
-                    <Text size="2xl" py={10} fontWeight="bold">
-                        {product.name}
-                    </Text>
-                    <Text size="sm" color="$coolGray500">
-                        From: Uphaar Collection
-                    </Text>
-
-                    {/* Price & Discount */}
+                {/* All the detail content goes inside the ScrollView */}
+                <VStack p="$3" space="sm">
+                    <Text size="2xl" py={10} fontWeight="bold">{product.name}</Text>
+                    <Text size="sm" color="$coolGray500">From: Uphaar Collection</Text>
                     <HStack alignItems="center" space="sm">
-                        <Text size="2xl" fontWeight="bold" color="$black">
-                            ${product.price}
-                        </Text>
-                        {product.oldPrice && (
-                            <Text color="$coolGray500" textDecorationLine="line-through">
-                                ${product.oldPrice}
-                            </Text>
-                        )}
+                        <Text size="2xl" fontWeight="bold" color="$black">${product.price}</Text>
+                        {product.oldPrice && (<Text color="$coolGray500" textDecorationLine="line-through">${product.oldPrice}</Text>)}
                         {product.discount && (
                             <Box bg="$pink500" rounded="$3xl" px="$2" py="$0">
-                                <Text size="sm" color="$white">
-                                    {product.discount}% OFF
-                                </Text>
+                                <Text size="sm" color="$white">{product.discount}% OFF</Text>
                             </Box>
                         )}
                     </HStack>
-
-                    {/* Ratings & Bought Count */}
                     <HStack space="xs" alignItems="center" justifyContent="flex-start">
                         <HStack alignItems="center" gap={2}>
-                            {[...Array(5)].map((_, i) => (
-                                <Star
-                                    key={i}
-                                    size={16}
-                                    color={i < product.rating ? "#facc15" : "#d1d5db"}
-                                    fill={i < product.rating ? "#facc15" : "none"}
-                                />
-                            ))}
-                            <Text ml={5} size="sm" color="$coolGray600">
-                                ({product.reviews})
-                            </Text>
+                            {[...Array(5)].map((_, i) => (<Star key={i} size={16} color={i < product.rating ? "#facc15" : "#d1d5db"} fill={i < product.rating ? "#facc15" : "none"}/>))}
+                            <Text ml={5} size="sm" color="$coolGray600">({product.reviews})</Text>
                         </HStack>
                     </HStack>
-
-                    <Text size="sm" color="$coolGray600">
-                        434 People Bought This Item Recently
-                    </Text>
-
-                    {/* New User Discount */}
+                    <Text size="sm" color="$coolGray600">434 People Bought This Item Recently</Text>
                     <Box bg="$rose50" p="$2.5" rounded="$2xl" flexDirection="row" alignItems="center">
-                        <ShoppingBag size={16} style={{ marginRight: 8 }} />
-                        <Text size="sm" color="$coolGray700">
-                            New Users - Flat 15% OFF On Your First Transaction
-                        </Text>
+                        <ShoppingBag size={16} style={{ marginRight: 8 }}/>
+                        <Text size="sm" color="$coolGray700">New Users - Flat 15% OFF On Your First Transaction</Text>
                     </Box>
-
-                    {/* Product Specs */}
-                    <Divider my="$2" />
+                    <Divider my="$2"/>
                     <VStack space="sm">
                         <Text size="md" fontWeight="semibold">The Paanita Ring</Text>
                         <HStack justifyContent="space-between">
@@ -147,13 +110,13 @@ export default function DetailScreen() {
                         </HStack>
                     </VStack>
                 </VStack>
-            </Box>
+            </ScrollView>
 
-            {/* Add to Cart Button */}
+            {/* The "Add to Cart" button at the bottom */}
             <Box p="$4" bg="$white" borderTopWidth={1} borderTopColor="$coolGray200">
-                <Button size="lg" rounded="$3xl" >
+                <Button size="lg" rounded="$3xl">
                     <HStack alignItems="center" space="xs">
-                        <ShoppingCart size={20} color="white" />
+                        <ShoppingCart size={20} color="white"/>
                         <Text color="$white" fontWeight="bold">Add To Cart</Text>
                     </HStack>
                 </Button>
