@@ -11,6 +11,11 @@ In this project, I am exploring and learning React Native with Expo. I have also
 - UI components powered by **Gluestack UI**
 - Simple and clean mobile interface
 - Designed for learning and experimentation
+- **API Fetch:** Communicate with backend APIs for dynamic data
+- **NFC / RFID Scan:** Read NFC/RFID tags for inventory or access functionality
+- **Printing Feature:** Print receipts or vouchers directly from the app
+- Fully functional on **iOS** and **Android**
+- Designed for rapid prototyping and experimentation
 
 ## Get started
 
