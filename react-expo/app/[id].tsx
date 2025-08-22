@@ -1,4 +1,4 @@
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { Box, Text, VStack, HStack, Image, Button, Divider, Pressable } from "@gluestack-ui/themed";
 import { ChevronLeft, Handbag, ShoppingBag, Star, Heart, ShoppingCart } from "lucide-react-native";
 import { products } from "../data/product";
@@ -10,6 +10,7 @@ export default function DetailScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
     const navigation = useNavigation();
     const product = products.find((p) => p.id === id);
+    const router = useRouter();
 
     if (!product) {
         return (
@@ -114,7 +115,8 @@ export default function DetailScreen() {
 
             {/* The "Add to Cart" button at the bottom */}
             <Box p="$4" bg="$white" borderTopWidth={1} borderTopColor="$coolGray200">
-                <Button size="lg" rounded="$3xl">
+                <Button size="lg" rounded="$3xl" onPress={() => router.push("/print")}>
+                    {/*<Button size="lg" rounded="$3xl" >*/}
                     <HStack alignItems="center" space="xs">
                         <ShoppingCart size={20} color="white"/>
                         <Text color="$white" fontWeight="bold">Add To Cart</Text>
