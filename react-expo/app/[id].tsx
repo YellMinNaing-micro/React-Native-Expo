@@ -115,8 +115,8 @@ export default function DetailScreen() {
 
             {/* The "Add to Cart" button at the bottom */}
             <Box p="$4" bg="$white" borderTopWidth={1} borderTopColor="$coolGray200">
-                <Button size="lg" rounded="$3xl" onPress={() => router.push("/print")}>
-                    {/*<Button size="lg" rounded="$3xl" >*/}
+                {/*<Button size="lg" rounded="$3xl" onPress={() => router.push("/nfcScan")}>*/}
+                    <Button size="lg" rounded="$3xl" >
                     <HStack alignItems="center" space="xs">
                         <ShoppingCart size={20} color="white"/>
                         <Text color="$white" fontWeight="bold">Add To Cart</Text>
