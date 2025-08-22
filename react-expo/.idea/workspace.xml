@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="917343fa-8950-4b0f-a9b6-dbb7e77a978d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/app/fetchApi.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/print.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/[id].tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/[id].tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +72,8 @@
       <workItem from="1755673915299" duration="9805000" />
       <workItem from="1755750278825" duration="6955000" />
       <workItem from="1755764443206" duration="3168000" />
+      <workItem from="1755839221399" duration="406000" />
+      <workItem from="1755848470138" duration="3391000" />
     </task>
     <servers />
   </component>
